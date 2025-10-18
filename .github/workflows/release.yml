@@ -38,7 +38,7 @@ jobs:
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
         run: |
           echo "Preparing release for tag $GITHUB_REF_NAME" 
-          sbtn ci-release
+          sbt ci-release
 
       - name: Post Release Notes (optional)
         if: success()
