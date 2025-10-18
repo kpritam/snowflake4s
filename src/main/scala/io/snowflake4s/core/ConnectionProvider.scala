@@ -14,20 +14,22 @@ import scala.util.control.NonFatal
 /** Provides JDBC connections for database operations. */
 trait ConnectionProvider {
 
-  /**
-   * Executes a function with a database connection, ensuring the connection is properly managed.
-   *
-   * @param use the function to execute with the connection
-   * @tparam A the return type of the function
-   * @return the result of the function or an error
-   */
+  /** Executes a function with a database connection, ensuring the connection is properly managed.
+    *
+    * @param use
+    *   the function to execute with the connection
+    * @tparam A
+    *   the return type of the function
+    * @return
+    *   the result of the function or an error
+    */
   def withConnection[A](use: Connection => Either[SnowflakeError, A]): Either[SnowflakeError, A]
 
-  /**
-   * Closes the connection provider and releases any associated resources.
-   *
-   * @return success or an error if closing fails
-   */
+  /** Closes the connection provider and releases any associated resources.
+    *
+    * @return
+    *   success or an error if closing fails
+    */
   def close(): Either[ConnectionError, Unit]
 
   private[core] def getConnection: Either[ConnectionError, Connection]
@@ -45,39 +47,46 @@ object ConnectionProvider {
   /** Specifies the type of connection provider to use. */
   sealed trait ConnectionProviderKind
   object ConnectionProviderKind {
+
     /** Uses a simple connection provider that creates new connections on demand. */
     case object Simple extends ConnectionProviderKind
+
     /** Uses a Hikari connection pool with optional customization. */
     final case class Hikari(customize: HikariConfig => HikariConfig = identity) extends ConnectionProviderKind
   }
 
-  /**
-   * Creates a connection provider of the specified kind.
-   *
-   * @param kind the type of connection provider
-   * @param config the connection configuration
-   * @return a new connection provider
-   */
+  /** Creates a connection provider of the specified kind.
+    *
+    * @param kind
+    *   the type of connection provider
+    * @param config
+    *   the connection configuration
+    * @return
+    *   a new connection provider
+    */
   def of(kind: ConnectionProviderKind, config: ConnectionConfig): ConnectionProvider = kind match {
     case Simple            => simple(config)
     case Hikari(customize) => hikari(config, customize)
   }
 
-  /**
-   * Creates a simple connection provider that creates new connections on demand.
-   *
-   * @param config the connection configuration
-   * @return a simple connection provider
-   */
+  /** Creates a simple connection provider that creates new connections on demand.
+    *
+    * @param config
+    *   the connection configuration
+    * @return
+    *   a simple connection provider
+    */
   def simple(config: ConnectionConfig): ConnectionProvider = new SimpleConnectionProvider(config)
 
-  /**
-   * Creates a Hikari connection pool provider with optional configuration.
-   *
-   * @param config the connection configuration
-   * @param hikariConfig optional customization function for the Hikari config
-   * @return a Hikari connection provider
-   */
+  /** Creates a Hikari connection pool provider with optional configuration.
+    *
+    * @param config
+    *   the connection configuration
+    * @param hikariConfig
+    *   optional customization function for the Hikari config
+    * @return
+    *   a Hikari connection provider
+    */
   def hikari(config: ConnectionConfig, hikariConfig: HikariConfig => HikariConfig = identity): ConnectionProvider =
     new HikariConnectionProvider(config, hikariConfig)
 

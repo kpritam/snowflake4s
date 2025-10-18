@@ -14,16 +14,21 @@ object QueryExecutor {
   final case class UpdateResult(updated: Int, queryId: Option[String])
   final case class BatchResult(updated: List[Int], queryId: Option[String])
 
-  /**
-   * Executes a query and returns the results.
-   *
-   * @param connection the database connection
-   * @param sql the SQL query string
-   * @param params the query parameters
-   * @param read the decoder for the result type
-   * @tparam T the result type
-   * @return the query result or an error
-   */
+  /** Executes a query and returns the results.
+    *
+    * @param connection
+    *   the database connection
+    * @param sql
+    *   the SQL query string
+    * @param params
+    *   the query parameters
+    * @param read
+    *   the decoder for the result type
+    * @tparam T
+    *   the result type
+    * @return
+    *   the query result or an error
+    */
   def executeQuery[T](
       connection: Connection,
       sql: String,
@@ -43,14 +48,17 @@ object QueryExecutor {
     }
   }
 
-  /**
-   * Executes an update command.
-   *
-   * @param connection the database connection
-   * @param sql the SQL command string
-   * @param params the command parameters
-   * @return the update result or an error
-   */
+  /** Executes an update command.
+    *
+    * @param connection
+    *   the database connection
+    * @param sql
+    *   the SQL command string
+    * @param params
+    *   the command parameters
+    * @return
+    *   the update result or an error
+    */
   def executeUpdate(connection: Connection, sql: String, params: Seq[Param]): Either[QueryError, UpdateResult] = {
     prepareStatement(connection, sql, params).flatMap { stmt =>
       try executeUpdateStatement(stmt).map(count => UpdateResult(count, extractQueryId(stmt)))
@@ -58,14 +66,17 @@ object QueryExecutor {
     }
   }
 
-  /**
-   * Executes a batch of commands.
-   *
-   * @param connection the database connection
-   * @param sql the SQL command string
-   * @param batches the list of parameter batches
-   * @return the batch result or an error
-   */
+  /** Executes a batch of commands.
+    *
+    * @param connection
+    *   the database connection
+    * @param sql
+    *   the SQL command string
+    * @param batches
+    *   the list of parameter batches
+    * @return
+    *   the batch result or an error
+    */
   def executeBatch(
       connection: Connection,
       sql: String,

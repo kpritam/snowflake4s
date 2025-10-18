@@ -10,30 +10,33 @@ final class SqlInterpolator(private val sc: StringContext) extends AnyVal {
 
   import SqlInterpolator.SingleFragment
 
-  /**
-   * Builds a SQL fragment from the string context and arguments.
-   *
-   * @param args the fragment arguments
-   * @return a SQL fragment
-   */
+  /** Builds a SQL fragment from the string context and arguments.
+    *
+    * @param args
+    *   the fragment arguments
+    * @return
+    *   a SQL fragment
+    */
   def sql(args: SingleFragment*): Fragment =
     mkFragment(args.toList, appendWhitespace = false)
 
-  /**
-   * Builds a SQL fragment with automatic whitespace appending.
-   *
-   * @param args the fragment arguments
-   * @return a SQL fragment
-   */
+  /** Builds a SQL fragment with automatic whitespace appending.
+    *
+    * @param args
+    *   the fragment arguments
+    * @return
+    *   a SQL fragment
+    */
   def fr(args: SingleFragment*): Fragment =
     mkFragment(args.toList, appendWhitespace = true)
 
-  /**
-   * Builds a SQL fragment without automatic whitespace.
-   *
-   * @param args the fragment arguments
-   * @return a SQL fragment
-   */
+  /** Builds a SQL fragment without automatic whitespace.
+    *
+    * @param args
+    *   the fragment arguments
+    * @return
+    *   a SQL fragment
+    */
   def fr0(args: SingleFragment*): Fragment =
     mkFragment(args.toList, appendWhitespace = false)
 
