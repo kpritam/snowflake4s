@@ -9,9 +9,6 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java: ["11", "17"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,14 +19,14 @@ jobs:
       - name: Setup JVM and Scala tools
         uses: coursier/setup-action@v1
         with:
-          jvm: temurin:${{ matrix.java }}
+          jvm: temurin:17
           apps: sbtn
 
       - name: Scalafmt Check
-        run: sbt scalafmtCheckAll
+        run: sbtn scalafmtCheckAll
 
       - name: Compile
-        run: sbt compile
+        run: sbtn compile
 
       - name: Run Tests
-        run: sbt test
+        run: sbtn test

@@ -6,6 +6,8 @@ Lightweight, purely-functional JDBC toolkit for Snowflake in Scala 2.13. Focus: 
 
 </div>
 
+[![CI](https://github.com/kpritam/snowflake4s/actions/workflows/ci.yml/badge.svg)](https://github.com/kpritam/snowflake4s/actions/workflows/ci.yml)
+
 ## Why snowflake4s?
 
 Snowflake's JDBC driver is powerful but low level. snowflake4s adds:
