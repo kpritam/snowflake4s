@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: ["11", "17"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Coursier cache
+        uses: coursier/cache-action@v6
+
+      - name: Setup JVM and Scala tools
+        uses: coursier/setup-action@v1
+        with:
+          jvm: temurin:${{ matrix.java }}
+          apps: sbtn
+
+      - name: Scalafmt Check
+        run: sbt scalafmtCheckAll
+
+      - name: Compile
+        run: sbt compile
+
+      - name: Run Tests
+        run: sbt test

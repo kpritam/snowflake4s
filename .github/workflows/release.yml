@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Coursier cache
+        uses: coursier/cache-action@v6
+
+      - name: Setup JVM and Scala tools
+        uses: coursier/setup-action@v1
+        with:
+          jvm: temurin:17
+          apps: sbtn
+
+      - name: Scalafmt Check
+        run: sbt scalafmtCheckAll
+
+      - name: Test
+        run: sbt test
+
+      - name: Publish (Sonatype / GitHub Packages)
+        env:
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+        run: |
+          echo "Preparing release for tag $GITHUB_REF_NAME" 
+          sbt ci-release
+
+      - name: Post Release Notes (optional)
+        if: success()
+        run: echo "Release $GITHUB_REF_NAME completed"
