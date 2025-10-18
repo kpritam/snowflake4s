@@ -20,7 +20,7 @@ jobs:
         uses: coursier/setup-action@v1
         with:
           jvm: temurin:17
-          apps: sbtn
+          apps: sbt sbtn
 
       - name: Scalafmt Check
         run: sbtn scalafmtCheckAll
