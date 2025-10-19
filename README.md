@@ -4,9 +4,9 @@
 
 Lightweight, purely-functional JDBC toolkit for Snowflake in Scala 2.13. Focus: type-safe row decoding, safe resource & transaction handling, ergonomic SQL composition.
 
-</div>
-
 [![CI](https://github.com/kpritam/snowflake4s/actions/workflows/ci.yml/badge.svg)](https://github.com/kpritam/snowflake4s/actions/workflows/ci.yml)
+
+</div>
 
 ## Why snowflake4s?
 
@@ -21,17 +21,15 @@ Snowflake's JDBC driver is powerful but low level. snowflake4s adds:
 | Lightweight error model            | Unified `SnowflakeError` ADT returning `Either`   |
 | Optional pooling                   | HikariCP integration via `SnowflakeClient.pooled` |
 
-Minimal dependencies. No reflection except macro expansion time. No runtime thread pools. Just JDBC + typeclasses.
-
 ## Features
 
-- 🔌 Connectivity via config, env, or manual construction
-- 🎯 Type-safe decoders & encoders (`Get`, `Put`, `Read`) with macro derivation
-- 🧩 SQL fragments & interpolation with automatic parameter binding
-- 🔁 Transaction support (client & session level) with rollback safety
-- 🧪 Query IDs surfaced (when available) for observability
-- 🌊 Connection pooling (Hikari) or simple connection provider
-- 🪶 Zero implicit global state – everything is explicit
+- Connectivity via config, env, or manual construction
+- Type-safe decoders & encoders (`Get`, `Put`, `Read`) with macro derivation
+- SQL fragments & interpolation with automatic parameter binding
+- Transaction support (client & session level) with rollback safety
+- Query IDs surfaced (when available) for observability
+- Connection pooling (Hikari) or simple connection provider
+- Zero implicit global state – everything is explicit
 
 ## Getting Started
 
@@ -59,7 +57,7 @@ snowflake4s {
 }
 ```
 
-Or environment variables (useful in CI):
+Or environment variables:
 
 ```bash
 export SNOWFLAKE_ACCOUNT=myaccount
@@ -155,15 +153,6 @@ client.executeBatch(
 )
 ```
 
-### Alternatives (Concise)
-
-| Use Case             | Recommended                     | Alternative                                                |
-| -------------------- | ------------------------------- | ---------------------------------------------------------- |
-| Query returning rows | `session.list(sql"…".query[A])` | `client.query[A](sql, params)` (raw string + manual Param) |
-| No params update     | `sql"…".update` via session     | `client.execute(sql)`                                      |
-| Dynamic IN lists     | `sql"… IN ${values}"`           | `Fragment.in(values)` manually                             |
-| Resource handling    | `withClient` + `withSession`    | Manual `pooled(config)` + explicit `close()`               |
-
 ## Core Abstractions
 
 | Abstraction              | Purpose                             | Notes                                                    |
@@ -226,8 +215,8 @@ sql"""SELECT id, name
 ## Running Tests
 
 ```bash
-sbt test                      # unit tests
-SNOWFLAKE_INTEGRATION_TEST=true sbt test  # with integration tests
+sbt test # unit tests
+SNOWFLAKE_INTEGRATION_TEST=true sbt test # with integration tests
 ```
 
 ## Credits
